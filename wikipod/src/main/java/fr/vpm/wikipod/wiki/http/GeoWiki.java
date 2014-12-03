@@ -25,7 +25,8 @@ import retrofit.converter.GsonConverter;
  */
 public class GeoWiki implements GeoArticles, Searches {
 
-  private static List<String> allPageIds;
+  private ArticleListener listener;
+
 
   public static final String EN_WIKIPEDIA = "https://en.wikipedia.org";
   /**
@@ -42,6 +43,7 @@ public class GeoWiki implements GeoArticles, Searches {
 
   @Override
   public Status searchArticles(Location location, int radius, ArticleListener listener) {
+    this.listener = listener;
     if (radius <= 0) {
       radius = Constants.LOCATION_RADIUS;
     }
@@ -66,7 +68,7 @@ public class GeoWiki implements GeoArticles, Searches {
       pageIdsParam += pageId;
     }
     pageIdsParam = pageIdsParam.substring(1);
-    wService.getArticleContents(pageIdsParam, new WikiApiCb());
+    wService.getArticleContents(pageIdsParam, new WikiApiCb(listener));
   }
 
   /**

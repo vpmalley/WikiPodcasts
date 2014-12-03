@@ -11,6 +11,7 @@ public interface GeoArticles {
 
   public enum Status {
     SEARCH_IN_PROGRESS,
+    LOCATION_DISABLED,
     INTERNET_DISABLED
   }
 

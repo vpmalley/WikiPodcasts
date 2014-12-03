@@ -23,4 +23,8 @@ public class Page {
   public List<Revision> getRevisions() {
     return revisions;
   }
+
+  public String getTitle() {
+    return title;
+  }
 }

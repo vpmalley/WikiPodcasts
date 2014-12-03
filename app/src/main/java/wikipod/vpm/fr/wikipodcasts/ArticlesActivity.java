@@ -200,7 +200,7 @@ public class ArticlesActivity extends ActionBarActivity
     public void onArticlesFound(List<Article> articles) {
       String result = "";
       if (articles != null ){
-        result = String.valueOf(articles.size());
+        result = articles.toString();
       }
       Toast.makeText(context, "received articles " + result, Toast.LENGTH_SHORT).show();
     }

@@ -30,6 +30,9 @@ public class Revision {
     return "format:" + contentformat + ", model:" + contentmodel + ", content(partial)" + content.substring(0, 30);
   }
 
+  public String getContent() {
+    return content;
+  }
 
 
   public static class RevisionDeserializer implements JsonDeserializer<Revision> {
