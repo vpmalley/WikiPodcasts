@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -125,6 +127,8 @@ public class ArticlesActivity extends ActionBarActivity
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
+    private AbsListView articlesView;
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -145,12 +149,13 @@ public class ArticlesActivity extends ActionBarActivity
                              Bundle savedInstanceState) {
       View rootView = inflater.inflate(R.layout.fragment_articles, container, false);
       Button actionButton = (Button) rootView.findViewById(R.id.action);
+      articlesView = (AbsListView) rootView.findViewById(R.id.articles);
 
       actionButton.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
           LocationProvider locP = new AndroidLocationProvider(getActivity());
-          LocationProvider.Status status = locP.acquireCurrentLocation(new ArticleSearcher(getActivity()));
+          LocationProvider.Status status = locP.acquireCurrentLocation(new ArticleSearcher(getActivity(), articlesView));
           Toast.makeText(getActivity(), "tried acquiring location, resulted in " + status.name(), Toast.LENGTH_SHORT).show();
         }
       });
@@ -170,8 +175,11 @@ public class ArticlesActivity extends ActionBarActivity
 
     private final Context context;
 
-    public ArticleSearcher(Context context) {
+    private final AbsListView articlesView;
+
+    public ArticleSearcher(Context context, AbsListView articlesView) {
       this.context = context;
+      this.articlesView = articlesView;
     }
 
     @Override
@@ -199,8 +207,12 @@ public class ArticlesActivity extends ActionBarActivity
     @Override
     public void onArticlesFound(List<Article> articles) {
       String result = "";
-      if (articles != null ){
+      if (articles != null) {
         result = articles.toString();
+        if (articlesView != null) {
+          ArrayAdapter<Article> articlesAdapter = new ArrayAdapter<Article>(context, R.layout.list_item, articles);
+          articlesView.setAdapter(articlesAdapter);
+        }
       }
       Toast.makeText(context, "received articles " + result, Toast.LENGTH_SHORT).show();
     }
