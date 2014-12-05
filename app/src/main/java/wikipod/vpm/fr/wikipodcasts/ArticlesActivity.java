@@ -1,29 +1,21 @@
 package wikipod.vpm.fr.wikipodcasts;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.List;
 
-import fr.vpm.wikipod.location.AndroidLocationProvider;
-import fr.vpm.wikipod.location.LocationProvider;
 import fr.vpm.wikipod.wiki.Article;
 import fr.vpm.wikipod.wiki.ArticleListener;
 import fr.vpm.wikipod.wiki.GeoArticles;
@@ -63,7 +55,7 @@ public class ArticlesActivity extends ActionBarActivity
     // update the main content by replacing fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
     fragmentManager.beginTransaction()
-            .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+            .replace(R.id.container, ArticlesFragment.newInstance(position + 1))
             .commit();
   }
 
@@ -117,106 +109,6 @@ public class ArticlesActivity extends ActionBarActivity
     return super.onOptionsItemSelected(item);
   }
 
-  /**
-   * A placeholder fragment containing a simple view.
-   */
-  public static class PlaceholderFragment extends Fragment {
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
-    private static final String ARG_SECTION_NUMBER = "section_number";
-
-    private AbsListView articlesView;
-
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
-    public static PlaceholderFragment newInstance(int sectionNumber) {
-      PlaceholderFragment fragment = new PlaceholderFragment();
-      Bundle args = new Bundle();
-      args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-      fragment.setArguments(args);
-      return fragment;
-    }
-
-    public PlaceholderFragment() {
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-      View rootView = inflater.inflate(R.layout.fragment_articles, container, false);
-      Button actionButton = (Button) rootView.findViewById(R.id.action);
-      articlesView = (AbsListView) rootView.findViewById(R.id.articles);
-
-      actionButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          LocationProvider locP = new AndroidLocationProvider(getActivity());
-          LocationProvider.Status status = locP.acquireCurrentLocation(new ArticleSearcher(getActivity(), articlesView));
-          Toast.makeText(getActivity(), "tried acquiring location, resulted in " + status.name(), Toast.LENGTH_SHORT).show();
-        }
-      });
-      return rootView;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-      super.onAttach(activity);
-      ((ArticlesActivity) activity).onSectionAttached(
-              getArguments().getInt(ARG_SECTION_NUMBER));
-    }
-  }
-
-
-  public static class ArticleSearcher implements LocationListener, ArticleListener {
-
-    private final Context context;
-
-    private final AbsListView articlesView;
-
-    public ArticleSearcher(Context context, AbsListView articlesView) {
-      this.context = context;
-      this.articlesView = articlesView;
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-      Toast.makeText(context, "received location " + location.getLatitude() + ", " + location.getLongitude(), Toast.LENGTH_SHORT).show();
-      GeoArticles geoWiki = new GeoWiki("");
-      geoWiki.searchArticles(location, 5000, this);
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    public void onArticlesFound(List<Article> articles) {
-      String result = "";
-      if (articles != null) {
-        result = articles.toString();
-        if (articlesView != null) {
-          ArrayAdapter<Article> articlesAdapter = new ArrayAdapter<Article>(context, R.layout.list_item, articles);
-          articlesView.setAdapter(articlesAdapter);
-        }
-      }
-      Toast.makeText(context, "received articles " + result, Toast.LENGTH_SHORT).show();
-    }
-  }
 
 }
 
