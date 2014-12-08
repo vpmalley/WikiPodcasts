@@ -1,4 +1,4 @@
-package wikipod.vpm.fr.wikipodcasts;
+package wikipod.vpm.fr.wikipodcasts.search;
 
 import android.content.Context;
 import android.location.Location;
@@ -14,6 +14,8 @@ import fr.vpm.wikipod.wiki.Article;
 import fr.vpm.wikipod.wiki.ArticleListener;
 import fr.vpm.wikipod.wiki.GeoArticles;
 import fr.vpm.wikipod.wiki.http.GeoWiki;
+import wikipod.vpm.fr.wikipodcasts.R;
+import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 
 /**
 * Created by vince on 05/12/14.
@@ -24,9 +26,12 @@ public class ArticleSearcher implements LocationListener, ArticleListener {
 
   private final AbsListView articlesView;
 
-  public ArticleSearcher(Context context, AbsListView articlesView) {
+  private final ProgressBarListener progressListener;
+
+  public ArticleSearcher(Context context, AbsListView articlesView, ProgressBarListener progressListener) {
     this.context = context;
     this.articlesView = articlesView;
+    this.progressListener = progressListener;
   }
 
   @Override
@@ -61,6 +66,7 @@ public class ArticleSearcher implements LocationListener, ArticleListener {
         articlesView.setAdapter(articlesAdapter);
       }
     }
+    progressListener.stopRefreshProgress();
     Toast.makeText(context, "received articles " + result, Toast.LENGTH_SHORT).show();
   }
 }

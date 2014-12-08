@@ -15,6 +15,7 @@ import android.widget.Toast;
 import fr.vpm.wikipod.location.AndroidLocationProvider;
 import fr.vpm.wikipod.location.LocationProvider;
 import fr.vpm.wikipod.wiki.Article;
+import wikipod.vpm.fr.wikipodcasts.search.ArticleSearcher;
 import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 
 /**

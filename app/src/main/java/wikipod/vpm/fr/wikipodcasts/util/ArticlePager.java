@@ -1,11 +1,14 @@
-package wikipod.vpm.fr.wikipodcasts;
+package wikipod.vpm.fr.wikipodcasts.util;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import java.util.ArrayList;
+
 import fr.vpm.wikipod.wiki.Article;
+import wikipod.vpm.fr.wikipodcasts.ArticleFragment;
 import wikipod.vpm.fr.wikipodcasts.bean.LocalArticles;
 
 /**
@@ -14,13 +17,16 @@ import wikipod.vpm.fr.wikipodcasts.bean.LocalArticles;
 public class ArticlePager extends FragmentStatePagerAdapter {
 
   public static final String ARTICLE_KEY = "article";
-  private LocalArticles articles;
+  public static final String ARTICLES_KEY = "articles";
+  public static final String INITIAL_POS_KEY = "initPos";
+
+  private ArrayList<Article> articles;
 
   public ArticlePager(FragmentManager fm) {
     super(fm);
   }
 
-  public void setArticles(LocalArticles articles){
+  public void setArticles(ArrayList<Article> articles){
     this.articles = articles;
   }
 
