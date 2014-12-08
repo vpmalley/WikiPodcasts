@@ -13,7 +13,7 @@ import wikipod.vpm.fr.wikipodcasts.bean.LocalArticles;
  */
 public class ArticlePager extends FragmentStatePagerAdapter {
 
-  private static final String ARTICLE_KEY = "article";
+  public static final String ARTICLE_KEY = "article";
   private LocalArticles articles;
 
   public ArticlePager(FragmentManager fm) {

@@ -5,6 +5,17 @@
                 android:padding="2dp"
                 tools:context=".ArticlesActivity$PlaceholderFragment">
 
+    <ProgressBar
+        android:id="@+id/processing"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminateBehavior="cycle"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:max="100"
+        />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

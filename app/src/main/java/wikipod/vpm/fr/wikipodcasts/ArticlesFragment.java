@@ -1,10 +1,7 @@
 package wikipod.vpm.fr.wikipodcasts;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import fr.vpm.wikipod.location.AndroidLocationProvider;
 import fr.vpm.wikipod.location.LocationProvider;
 import fr.vpm.wikipod.wiki.Article;
+import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -29,6 +28,8 @@ public class ArticlesFragment extends Fragment {
   private static final String ARG_SECTION_NUMBER = "section_number";
 
   private AbsListView articlesView;
+
+  private ProgressBarListener progressListener;
 
   /**
    * Returns a new instance of this fragment for the given section
@@ -49,6 +50,8 @@ public class ArticlesFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     View rootView = inflater.inflate(R.layout.fragment_articles, container, false);
+    ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.processing);
+    progressListener = new ProgressBarListener(progressBar);
     Button actionButton = (Button) rootView.findViewById(R.id.action);
     articlesView = (AbsListView) rootView.findViewById(R.id.articles);
 
@@ -63,8 +66,9 @@ public class ArticlesFragment extends Fragment {
     actionButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        progressListener.startRefreshProgress();
         LocationProvider locP = new AndroidLocationProvider(getActivity());
-        LocationProvider.Status status = locP.acquireCurrentLocation(new ArticleSearcher(getActivity(), articlesView));
+        LocationProvider.Status status = locP.acquireCurrentLocation(new ArticleSearcher(getActivity(), articlesView, progressListener));
         Toast.makeText(getActivity(), "tried acquiring location, resulted in " + status.name(), Toast.LENGTH_SHORT).show();
       }
     });
