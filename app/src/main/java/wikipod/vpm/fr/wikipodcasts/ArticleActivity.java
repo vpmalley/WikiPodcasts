@@ -19,7 +19,7 @@ public class ArticleActivity extends FragmentActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_content);
-    getActionBar().setDisplayHomeAsUpEnabled(true);
+    //getActionBar().setDisplayHomeAsUpEnabled(true);
 
     ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 

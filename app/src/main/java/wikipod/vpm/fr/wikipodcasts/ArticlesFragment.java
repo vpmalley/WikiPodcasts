@@ -1,6 +1,7 @@
 package wikipod.vpm.fr.wikipodcasts;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,10 +13,14 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import fr.vpm.wikipod.location.AndroidLocationProvider;
 import fr.vpm.wikipod.location.LocationProvider;
 import fr.vpm.wikipod.wiki.Article;
+import wikipod.vpm.fr.wikipodcasts.bean.LocalArticles;
 import wikipod.vpm.fr.wikipodcasts.search.ArticleSearcher;
+import wikipod.vpm.fr.wikipodcasts.util.ArticlePager;
 import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 
 /**
@@ -60,7 +65,15 @@ public class ArticlesFragment extends Fragment {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Article clickedArticle = (Article) parent.getAdapter().getItem(position);
-        Toast.makeText(getActivity(), clickedArticle.getTitle(), Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(getActivity(), ArticleActivity.class);
+
+        // TODO find a way to get all the items, probably by storing it here
+        ArrayList<Article> clickedArticleAsList = new ArrayList<Article>();
+        clickedArticleAsList.add(clickedArticle);
+
+        i.putExtra(ArticlePager.ARTICLES_KEY, new LocalArticles(clickedArticleAsList));
+        i.putExtra(ArticlePager.INITIAL_POS_KEY, 0);
+        startActivity(i);
       }
     });
 
