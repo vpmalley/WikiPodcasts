@@ -26,11 +26,12 @@ public class GeosearchCb implements Callback<Result> {
   @Override
   public void success(Result query, Response response) {
     Log.d("http", "success ids : " + query.toString());
-    List<String> pageIds = new ArrayList<String>();
+
+    List<String> pageTitles = new ArrayList<String>();
     for (Page article : query.getQuery().getGeosearch()) {
-      pageIds.add(article.getPageId());
+      pageTitles.add(article.getTitle());
     }
-    searches.searchPageIds(pageIds);
+    searches.searchPageTitles(pageTitles);
   }
 
   @Override

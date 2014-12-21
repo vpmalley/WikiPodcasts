@@ -11,6 +11,10 @@ public class Page {
     return String.valueOf(pageid);
   }
 
+  public String getTitle() {
+    return title;
+  }
+
   private int ns;
 
   private String title;

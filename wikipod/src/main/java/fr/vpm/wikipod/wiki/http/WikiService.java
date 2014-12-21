@@ -19,9 +19,8 @@ public interface WikiService {
 
 
   // https://en.wikipedia.org/w/api.php?action=query&titles=Main%20Page|Fksdlfsdss|Talk:&indexpageids&format=json&continue=
-  //http://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=jsonfm&continue=&pageids=123|456
+  //  http://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=jsonfm&continue=&pageids=123|456
   @GET("/w/api.php?action=query&prop=revisions&rvprop=content&format=json&continue=")
   void getArticleContents(@Query("pageids") String pageIds, Callback<fr.vpm.wikipod.wiki.http.api.Query> resultListener);
-
 
 }

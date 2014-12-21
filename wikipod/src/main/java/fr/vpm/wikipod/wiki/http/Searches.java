@@ -21,4 +21,10 @@ public interface Searches {
    * @param pageIds the ids of the pages to look up
    */
   void searchPageIds(List<String> pageIds);
+
+  /**
+   * Search for the content of these pages
+   * @param titles the titles of the pages to look up
+   */
+  void searchPageTitles(List<String> titles);
 }

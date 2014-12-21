@@ -15,6 +15,8 @@ import fr.vpm.wikipod.wiki.http.api.Query;
 import fr.vpm.wikipod.wiki.http.api.Revision;
 import fr.vpm.wikipod.wiki.http.callback.GeosearchCb;
 import fr.vpm.wikipod.wiki.http.callback.WikiApiCb;
+import fr.vpm.wikipod.wiki.http.html.HtmlClient;
+import fr.vpm.wikipod.wiki.http.html.WikiContentService;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
@@ -69,6 +71,11 @@ public class GeoWiki implements GeoArticles, Searches {
     }
     pageIdsParam = pageIdsParam.substring(1);
     wService.getArticleContents(pageIdsParam, new WikiApiCb(listener));
+  }
+
+  @Override
+  public void searchPageTitles(List<String> titles) {
+    new WikiContentService(new HtmlClient(), wikisource, listener).searchTitles(titles.toArray(new String[titles.size()]));
   }
 
   /**
