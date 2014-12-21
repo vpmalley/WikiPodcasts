@@ -1,8 +1,5 @@
 package wikipod.vpm.fr.wikipodcasts;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -10,16 +7,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
-
-import java.util.List;
-
-import fr.vpm.wikipod.wiki.Article;
-import fr.vpm.wikipod.wiki.ArticleListener;
-import fr.vpm.wikipod.wiki.GeoArticles;
-import fr.vpm.wikipod.wiki.http.GeoWiki;
 
 
 public class ArticlesActivity extends ActionBarActivity

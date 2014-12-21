@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import fr.vpm.wikipod.wiki.Article;
 import wikipod.vpm.fr.wikipodcasts.ArticleFragment;
-import wikipod.vpm.fr.wikipodcasts.bean.LocalArticles;
 
 /**
  * Created by vince on 05/12/14.

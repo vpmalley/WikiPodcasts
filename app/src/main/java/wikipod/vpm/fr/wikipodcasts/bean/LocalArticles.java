@@ -1,15 +1,6 @@
 package wikipod.vpm.fr.wikipodcasts.bean;
 
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 import fr.vpm.wikipod.wiki.Article;
 
