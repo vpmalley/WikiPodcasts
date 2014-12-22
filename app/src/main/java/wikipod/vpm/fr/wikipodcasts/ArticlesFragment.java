@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -58,7 +58,7 @@ public class ArticlesFragment extends Fragment {
     View rootView = inflater.inflate(R.layout.fragment_articles, container, false);
     ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.processing);
     progressListener = new ProgressBarListener(progressBar);
-    Button actionButton = (Button) rootView.findViewById(R.id.action);
+    ImageButton locateButton = (ImageButton) rootView.findViewById(R.id.locate);
     articlesView = (AbsListView) rootView.findViewById(R.id.articles);
 
     articlesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,7 +77,7 @@ public class ArticlesFragment extends Fragment {
       }
     });
 
-    actionButton.setOnClickListener(new View.OnClickListener() {
+    locateButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         progressListener.startRefreshProgress();

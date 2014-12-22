@@ -9,7 +9,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
-    <string name="button_search_articles">Search for nearby Wikipedia articles</string>
     <string name="action_podcast">Read As Podcast</string>
     <string name="action_browser">View in browser</string>
 
