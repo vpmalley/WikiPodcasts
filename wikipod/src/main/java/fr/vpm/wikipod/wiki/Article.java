@@ -9,15 +9,21 @@ import android.os.Parcelable;
  */
 public class Article implements Parcelable {
 
+  private static final String SOURCE_KEY = "source";
+
   private static final String TITLE_KEY = "title";
 
   private static final String CONTENT_KEY = "content";
+  private static final String WIKI_PATH = "/w/index.php?action=view&title=";
+
+  private final String wikisource;
 
   private final String title;
 
   private final String content;
 
-  public Article(String title, String content) {
+  public Article(String wikisource, String title, String content) {
+    this.wikisource = wikisource;
     this.title = title;
     this.content = content;
   }
@@ -28,6 +34,10 @@ public class Article implements Parcelable {
 
   public String getContent(){
     return content;
+  }
+
+  public String getWebUrl() {
+    return wikisource + WIKI_PATH + title;
   }
 
   @Override
@@ -43,6 +53,7 @@ public class Article implements Parcelable {
   @Override
   public void writeToParcel(Parcel parcel, int i) {
     Bundle b = new Bundle();
+    b.putString(SOURCE_KEY, wikisource);
     b.putString(TITLE_KEY, title);
     b.putString(CONTENT_KEY, content);
     parcel.writeBundle(b);
@@ -52,6 +63,7 @@ public class Article implements Parcelable {
     Bundle b = in.readBundle(Article.class.getClassLoader());
     // without setting the classloader, it fails on BadParcelableException : ClassNotFoundException when
     // unmarshalling Media class
+    wikisource = b.getString(SOURCE_KEY);
     title = b.getString(TITLE_KEY);
     content = b.getString(CONTENT_KEY);
   }

@@ -70,7 +70,7 @@ public class GeoWiki implements GeoArticles, Searches {
       pageIdsParam += pageId;
     }
     pageIdsParam = pageIdsParam.substring(1);
-    wService.getArticleContents(pageIdsParam, new WikiApiCb(listener));
+    wService.getArticleContents(pageIdsParam, new WikiApiCb(listener, wikisource));
   }
 
   @Override

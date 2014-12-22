@@ -4,6 +4,10 @@
           android:title="@string/action_podcast"
           android:icon="@drawable/ic_action_play"
           app:showAsAction="ifRoom"/>
+    <item android:id="@+id/action_browser"
+          android:title="@string/action_browser"
+          android:icon="@drawable/ic_action_web_site"
+          app:showAsAction="ifRoom"/>
     <item android:id="@+id/action_settings"
           android:title="@string/action_settings"
           android:orderInCategory="100"
