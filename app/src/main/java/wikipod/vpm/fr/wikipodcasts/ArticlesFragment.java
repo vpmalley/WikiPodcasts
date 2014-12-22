@@ -81,8 +81,8 @@ public class ArticlesFragment extends Fragment {
       @Override
       public void onClick(View v) {
         progressListener.startRefreshProgress();
-        LocationProvider locP = new AndroidLocationProvider(getActivity());
-        LocationProvider.Status status = locP.acquireCurrentLocation(new ArticleSearcher(getActivity(), articlesView, progressListener));
+        LocationProvider locP = new AndroidLocationProvider(getActivity(), new ArticleSearcher(getActivity(), articlesView, progressListener));
+        LocationProvider.Status status = locP.acquireCurrentLocation();
         Toast.makeText(getActivity(), "tried acquiring location, resulted in " + status.name(), Toast.LENGTH_SHORT).show();
       }
     });

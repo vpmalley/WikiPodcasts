@@ -1,15 +1,15 @@
 package wikipod.vpm.fr.wikipodcasts.search;
 
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
+import android.location.Geocoder;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import java.util.List;
 
+import fr.vpm.wikipod.location.Localisation;
+import fr.vpm.wikipod.location.LocalisationListener;
 import fr.vpm.wikipod.wiki.Article;
 import fr.vpm.wikipod.wiki.ArticleListener;
 import fr.vpm.wikipod.wiki.GeoArticles;
@@ -20,7 +20,7 @@ import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 /**
 * Created by vince on 05/12/14.
 */
-public class ArticleSearcher implements LocationListener, ArticleListener {
+public class ArticleSearcher implements LocalisationListener, ArticleListener {
 
   private final Context context;
 
@@ -35,25 +35,15 @@ public class ArticleSearcher implements LocationListener, ArticleListener {
   }
 
   @Override
-  public void onLocationChanged(Location location) {
-    Toast.makeText(context, "received location " + location.getLatitude() + ", " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+  public void onLocationChanged(Localisation localisation) {
+    String geocodingInfo = "no geocoding implem";
+    if (Geocoder.isPresent()){
+      geocodingInfo = localisation.getNearbyAddresses().get(0).getLocality();
+    }
+    Toast.makeText(context, "received localisation " + localisation.getLatitude() + ", " +
+            localisation.getLongitude() + ", " + geocodingInfo, Toast.LENGTH_SHORT).show();
     GeoArticles geoWiki = new GeoWiki("");
-    geoWiki.searchArticles(location, 5000, this);
-  }
-
-  @Override
-  public void onStatusChanged(String provider, int status, Bundle extras) {
-
-  }
-
-  @Override
-  public void onProviderEnabled(String provider) {
-
-  }
-
-  @Override
-  public void onProviderDisabled(String provider) {
-
+    geoWiki.searchArticles(localisation, 5000, this);
   }
 
   @Override

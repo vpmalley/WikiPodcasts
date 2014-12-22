@@ -1,12 +1,17 @@
 package fr.vpm.wikipod.location;
 
 import android.content.Context;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.Looper;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.vpm.wikipod.Constants;
@@ -16,16 +21,19 @@ import fr.vpm.wikipod.Constants;
  *
  * Created by vince on 28/11/14.
  */
-public class AndroidLocationProvider implements LocationProvider {
+public class AndroidLocationProvider implements LocationProvider, LocationListener {
 
   private final Context context;
 
-  public AndroidLocationProvider(Context context) {
+  private final LocalisationListener listener;
+
+  public AndroidLocationProvider(Context context, LocalisationListener listener) {
     this.context = context;
+    this.listener = listener;
   }
 
   @Override
-  public Status acquireCurrentLocation(LocationListener listener) {
+  public Status acquireCurrentLocation() {
     Status status;
     Criteria locCriteria = new Criteria();
     locCriteria.setAccuracy(Criteria.ACCURACY_LOW);
@@ -38,21 +46,60 @@ public class AndroidLocationProvider implements LocationProvider {
     if ((lastLocation == null) || (lastLocation.getTime() < System.currentTimeMillis() - Constants.LOCATION_EXPIRY)) {
       List<String> availableProviders = locMan.getProviders(locCriteria, true);
       if ((availableProviders != null) && (!availableProviders.isEmpty())) {
-        locMan.requestLocationUpdates(3, 2, locCriteria, listener, Looper.getMainLooper());
+        locMan.requestLocationUpdates(3, 2, locCriteria, this, Looper.getMainLooper());
         status = Status.LOCATION_IN_PROGRESS;
       } else {
         status = Status.NO_PROVIDER;
       }
     } else {
-      listener.onLocationChanged(lastLocation);
+      listener.onLocationChanged(getLocalisationFromLocation(lastLocation));
       status = Status.LOCATION_AVAILABLE;
     }
     return status;
   }
 
-  @Override
-  public void locationSatisfying(LocationListener listener) {
+  /**
+   * Once the {@link android.location.LocationListener} used to receive location has received the location, it must notify this provider with a call to this method.
+   *
+   */
+  public void locationSatisfying() {
     LocationManager locMan = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-    locMan.removeUpdates(listener);
+    locMan.removeUpdates(this);
+  }
+
+  @Override
+  public void onLocationChanged(Location location) {
+    locationSatisfying();
+    Localisation loc = getLocalisationFromLocation(location);
+    listener.onLocationChanged(loc);
+  }
+
+  private Localisation getLocalisationFromLocation(Location location) {
+    Localisation localisation = new Localisation(location);
+    if (Geocoder.isPresent()) {
+      List<Address> addresses = new ArrayList<>();
+      try {
+        addresses.addAll(new Geocoder(context).getFromLocation(location.getLatitude(), location.getLongitude(), 10));
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      localisation.setNearbyAddresses(addresses);
+    }
+    return localisation;
+  }
+
+  @Override
+  public void onStatusChanged(String provider, int status, Bundle extras) {
+
+  }
+
+  @Override
+  public void onProviderEnabled(String provider) {
+
+  }
+
+  @Override
+  public void onProviderDisabled(String provider) {
+
   }
 }
