@@ -5,8 +5,12 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,7 +22,7 @@ import wikipod.vpm.fr.wikipodcasts.util.ArticlePager;
 /**
  * Created by vince on 07/12/14.
  */
-public class ArticleActivity extends FragmentActivity {
+public class ArticleActivity extends ActionBarActivity {
 
   private TextToSpeech tts;
 
@@ -36,6 +40,7 @@ public class ArticleActivity extends FragmentActivity {
       ArticlePager articleAdapter = new ArticlePager(getSupportFragmentManager());
       articleAdapter.setArticles(articles);
       viewPager.setAdapter(articleAdapter);
+      viewPager.setCurrentItem(0);
     }
     if (i.hasExtra(ArticlePager.INITIAL_POS_KEY)){
       int initPos = i.getIntExtra(ArticlePager.INITIAL_POS_KEY, -1);
@@ -67,5 +72,6 @@ public class ArticleActivity extends FragmentActivity {
     }
     return super.onOptionsItemSelected(item);
   }
+
 
 }

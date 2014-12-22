@@ -26,7 +26,7 @@ public class HtmlClient implements TextHttpClient {
       InputStream in = new BufferedInputStream(urlConnection.getInputStream());
       // close
       StringWriter writer = new StringWriter();
-      IOUtils.copy(in, writer);
+      IOUtils.copy(in, writer, urlConnection.getContentEncoding());
       result = writer.toString();
       in.close();
     } catch (IOException e) {

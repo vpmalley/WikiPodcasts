@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +34,14 @@ public class ArticleFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View v = inflater.inflate(R.layout.fragment_article, container, false);
-    contentView = (WebView) v.findViewById(R.id.content);
     setHasOptionsMenu(true);
+    contentView = (WebView) v.findViewById(R.id.content);
 
     Bundle b = getArguments();
     if (b.containsKey(ArticlePager.ARTICLE_KEY)) {
       article = b.getParcelable(ArticlePager.ARTICLE_KEY);
-      contentView.loadData(article.getContent(), "text/html", "UTF-8");
+      contentView.loadData(article.getContent(), "text/html", null);
+      Log.d("content", article.getContent().substring(0, 100));
     }
     return v;
   }
