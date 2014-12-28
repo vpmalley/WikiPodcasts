@@ -22,6 +22,8 @@ import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 */
 public class ArticleSearcher implements LocalisationListener, ArticleListener {
 
+  public static final int DEFAULT_RADIUS = 5000; // the radius to search around, in meters
+
   private final Context context;
 
   private final AbsListView articlesView;
@@ -43,7 +45,7 @@ public class ArticleSearcher implements LocalisationListener, ArticleListener {
     Toast.makeText(context, "received localisation " + localisation.getLatitude() + ", " +
             localisation.getLongitude() + ", " + geocodingInfo, Toast.LENGTH_SHORT).show();
     GeoArticles geoWiki = new GeoWiki("");
-    geoWiki.searchArticles(localisation, 5000, this);
+    geoWiki.searchArticles(localisation, DEFAULT_RADIUS, this);
   }
 
   @Override

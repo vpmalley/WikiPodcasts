@@ -9,7 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class ArticlesActivity extends ActionBarActivity
+/**
+ * This is the main activity, mostly a frame around the fragment containing the actual data and behaviour
+ */
+public class FramingActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
   /**

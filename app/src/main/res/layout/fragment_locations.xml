@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="2dp"
+                tools:context=".ArticlesActivity$PlaceholderFragment">
+
+    <ProgressBar
+        android:id="@+id/processing"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminateBehavior="cycle"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:max="100"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_bar">
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/searchField"
+            android:minWidth="250dp"
+            android:maxWidth="250dp"
+            android:inputType="text"
+            android:hint="Where ?"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:minWidth="50dp"
+            android:id="@+id/searchButton"
+            android:src="@drawable/ic_action_search"
+            android:contentDescription="Search"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:minWidth="50dp"
+            android:id="@+id/locateButton"
+            android:src="@drawable/ic_action_place"
+            android:contentDescription="Locate"/>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/locations"
+        android:layout_below="@id/search_bar"/>
+
+</RelativeLayout>
