@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -79,9 +80,9 @@ public class AndroidLocationProvider implements LocationProvider, LocationListen
     if (Geocoder.isPresent()) {
       List<Address> addresses = new ArrayList<>();
       try {
-        addresses.addAll(new Geocoder(context).getFromLocation(location.getLatitude(), location.getLongitude(), 10));
+        addresses.addAll(new Geocoder(context).getFromLocation(location.getLatitude(), location.getLongitude(), Localisation.DEFAULT_MAX_RESULTS));
       } catch (IOException e) {
-        e.printStackTrace();
+        Log.w("location", e.toString());
       }
       localisation.setNearbyAddresses(addresses);
     }

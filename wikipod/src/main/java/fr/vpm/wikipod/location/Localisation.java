@@ -11,12 +11,18 @@ import java.util.List;
  */
 public class Localisation extends Location{
 
+  public static final int DEFAULT_MAX_RESULTS = 10;
   private List<Address> nearbyAddresses = new ArrayList<>();
 
   private Address pickedAddress;
 
   public Localisation(Location l) {
     super(l);
+  }
+
+  public Localisation(List<Address> nearbyAddresses) {
+    super("Geocoder");
+    this.nearbyAddresses = nearbyAddresses;
   }
 
   public void setNearbyAddresses(List<Address> nearbyAddresses) {

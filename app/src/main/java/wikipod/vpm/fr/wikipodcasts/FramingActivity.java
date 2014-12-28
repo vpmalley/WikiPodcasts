@@ -1,6 +1,7 @@
 package wikipod.vpm.fr.wikipodcasts;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -42,17 +43,22 @@ public class FramingActivity extends ActionBarActivity
 
   @Override
   public void onNavigationDrawerItemSelected(int position) {
-    // update the main content by replacing fragments
+    Fragment fragment = null;
+    if (0 == position) {
+      fragment = LocationFragment.newInstance(position + 1);
+    } else {
+      fragment = ArticlesFragment.newInstance(position + 1);
+    }
     FragmentManager fragmentManager = getSupportFragmentManager();
     fragmentManager.beginTransaction()
-            .replace(R.id.container, ArticlesFragment.newInstance(position + 1))
+            .replace(R.id.container, fragment)
             .commit();
   }
 
   public void onSectionAttached(int number) {
     switch (number) {
       case 1:
-        mTitle = getString(R.string.title_section1);
+        mTitle = getString(R.string.title_section_locations);
         break;
       case 2:
         mTitle = getString(R.string.title_section2);

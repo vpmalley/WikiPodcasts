@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import fr.vpm.wikipod.location.AndroidLocationProvider;
 import fr.vpm.wikipod.location.LocationProvider;
 import wikipod.vpm.fr.wikipodcasts.search.ArticleSearcher;
+import wikipod.vpm.fr.wikipodcasts.search.LocalisationSearcher;
 import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 
 /**
@@ -49,14 +51,18 @@ public class LocationFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    View rootView = inflater.inflate(R.layout.fragment_articles, container, false);
+    View rootView = inflater.inflate(R.layout.fragment_locations, container, false);
     ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.processing);
     progressListener = new ProgressBarListener(progressBar);
     locationsView = (AbsListView) rootView.findViewById(R.id.locations);
+    final EditText searchField = (EditText) rootView.findViewById(R.id.searchField);
 
-    locationsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    ImageButton searchButton = (ImageButton) rootView.findViewById(R.id.searchButton);
+    searchButton.setOnClickListener(new View.OnClickListener() {
       @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+      public void onClick(View v) {
+        progressListener.startRefreshProgress();
+        new LocalisationSearcher(getActivity(), locationsView, progressListener).searchLocation(searchField.getText().toString());
       }
     });
 
@@ -65,7 +71,7 @@ public class LocationFragment extends Fragment {
       @Override
       public void onClick(View v) {
         progressListener.startRefreshProgress();
-        LocationProvider locP = new AndroidLocationProvider(getActivity(), new ArticleSearcher(getActivity(), locationsView, progressListener));
+        LocationProvider locP = new AndroidLocationProvider(getActivity(), new LocalisationSearcher(getActivity(), locationsView, progressListener));
         LocationProvider.Status status = locP.acquireCurrentLocation();
         Toast.makeText(getActivity(), "tried acquiring location, resulted in " + status.name(), Toast.LENGTH_SHORT).show();
       }
