@@ -44,7 +44,9 @@ public class LocalisationSearcher implements LocalisationListener {
             localisation.getLongitude() + ", " + geocodingInfo, Toast.LENGTH_SHORT).show();
     progressListener.stopRefreshProgress();
     List<Address> addresses = localisation.getNearbyAddresses();
-    locationsView.setAdapter(new ArrayAdapter<Address>(context, R.layout.list_item, addresses));
+    List<String> printableAddresses = getPrintableAddresses(addresses);
+
+    locationsView.setAdapter(new ArrayAdapter<String>(context, R.layout.list_item, printableAddresses));
   }
 
   public Localisation searchLocation(String searchName) {
@@ -57,7 +59,22 @@ public class LocalisationSearcher implements LocalisationListener {
       Log.w("location", e.toString());
     }
     progressListener.stopRefreshProgress();
-    locationsView.setAdapter(new ArrayAdapter<Address>(context, R.layout.list_item, addresses));
+    List<String> printableAddresses = getPrintableAddresses(addresses);
+    locationsView.setAdapter(new ArrayAdapter<String>(context, R.layout.list_item, printableAddresses));
     return new Localisation(addresses);
   }
+
+  private List<String> getPrintableAddresses(List<Address> addresses) {
+    List<String> printableAddresses = new ArrayList<>();
+    for (Address address : addresses) {
+      StringBuilder addressLines = new StringBuilder();
+      int i = 0;
+      while (i < address.getMaxAddressLineIndex()){
+        addressLines.append(address.getAddressLine(i++));
+      }
+      printableAddresses.add(addressLines.toString());
+    }
+    return printableAddresses;
+  }
+
 }
