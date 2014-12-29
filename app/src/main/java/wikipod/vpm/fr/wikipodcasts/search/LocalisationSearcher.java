@@ -14,19 +14,23 @@ import java.util.List;
 
 import fr.vpm.wikipod.location.Localisation;
 import fr.vpm.wikipod.location.LocalisationListener;
+import wikipod.vpm.fr.wikipodcasts.AddressPickerFragment;
 import wikipod.vpm.fr.wikipodcasts.R;
 import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 
 /**
  * Created by vince on 28/12/14.
  */
-public class LocalisationSearcher implements LocalisationListener {
+public class LocalisationSearcher implements LocalisationListener, AddressPickedListener {
+
+  private static final int ADDRESS_REQ = 1001;
 
   private final Context context;
 
   private final AbsListView locationsView;
 
   private final ProgressBarListener progressListener;
+  private Localisation currentLocalisation;
 
   public LocalisationSearcher(Context context, AbsListView locationsView, ProgressBarListener progressListener) {
     this.context = context;
@@ -47,15 +51,13 @@ public class LocalisationSearcher implements LocalisationListener {
 
     if (localisation.getNearbyAddresses().size() == 1){
       localisation.setPickedAddress(localisation.getNearbyAddresses().get(0));
+      currentLocalisation = localisation;
+      onAddressPicked(0, ADDRESS_REQ);
     } else {
       List<Address> addresses = localisation.getNearbyAddresses();
-      List<String> printableAddresses = getPrintableAddresses(addresses);
-      // open a dialog fragment
+      ArrayList<String> printableAddresses = getPrintableAddresses(addresses);
+      new AddressPickerFragment().openAddressPicker(null, printableAddresses, this, ADDRESS_REQ);
     }
-
-    List<Localisation> localisations = new ArrayList<>();
-    localisations.add(localisation);
-    locationsView.setAdapter(new ArrayAdapter<Localisation>(context, R.layout.list_item, localisations));
   }
 
   public Localisation searchLocation(String searchName) {
@@ -70,23 +72,31 @@ public class LocalisationSearcher implements LocalisationListener {
     progressListener.stopRefreshProgress();
     Localisation result = new Localisation(addresses, null);
     if (addresses.size() == 1){
-      new Localisation(addresses, addresses.get(0));
+      currentLocalisation = new Localisation(addresses, addresses.get(0));
+      onAddressPicked(0, ADDRESS_REQ);
     } else {
-      List<String> printableAddresses = getPrintableAddresses(addresses);
+      ArrayList<String> printableAddresses = getPrintableAddresses(addresses);
       // open a dialog fragment
+      new AddressPickerFragment().openAddressPicker(null, printableAddresses, this, ADDRESS_REQ);
     }
-
-    List<Localisation> localisations = new ArrayList<>();
-    localisations.add(result);
-    locationsView.setAdapter(new ArrayAdapter<Localisation>(context, R.layout.list_item, localisations));
     return result;
   }
 
-  private List<String> getPrintableAddresses(List<Address> addresses) {
-    List<String> printableAddresses = new ArrayList<>();
+  private ArrayList<String> getPrintableAddresses(List<Address> addresses) {
+    ArrayList<String> printableAddresses = new ArrayList<>();
     for (Address address : addresses) {
       printableAddresses.add(Localisation.getAddressLines(address));
     }
     return printableAddresses;
+  }
+
+  @Override
+  public void onAddressPicked(int position, int requestCode) {
+     if (ADDRESS_REQ == requestCode) {
+       currentLocalisation.setPickedAddress(currentLocalisation.getNearbyAddresses().get(position));
+       List<Localisation> localisations = new ArrayList<>();
+       localisations.add(currentLocalisation);
+       locationsView.setAdapter(new ArrayAdapter<Localisation>(context, R.layout.list_item, localisations));
+     }
   }
 }
