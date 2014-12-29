@@ -20,9 +20,10 @@ public class Localisation extends Location{
     super(l);
   }
 
-  public Localisation(List<Address> nearbyAddresses) {
+  public Localisation(List<Address> nearbyAddresses, Address address) {
     super("Geocoder");
     this.nearbyAddresses = nearbyAddresses;
+    this.pickedAddress = address;
   }
 
   public void setNearbyAddresses(List<Address> nearbyAddresses) {
@@ -35,9 +36,31 @@ public class Localisation extends Location{
 
   public void setPickedAddress(Address pickedAddress) {
     this.pickedAddress = pickedAddress;
+
   }
 
   public Address getPickedAddress() {
     return pickedAddress;
+  }
+
+  public static String getAddressLines(Address address) {
+    StringBuilder addressLines = new StringBuilder();
+    int i = 0;
+    while (i < address.getMaxAddressLineIndex()){
+      addressLines.append(address.getAddressLine(i++));
+    }
+    return addressLines.toString();
+  }
+
+
+  @Override
+  public String toString() {
+    String display;
+    if (pickedAddress != null) {
+      display = getAddressLines(pickedAddress);
+    } else {
+      display = "Lat " + getLatitude() + ", Lon " + getLongitude();
+    }
+    return display;
   }
 }

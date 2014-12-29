@@ -43,10 +43,19 @@ public class LocalisationSearcher implements LocalisationListener {
     Toast.makeText(context, "received localisation " + localisation.getLatitude() + ", " +
             localisation.getLongitude() + ", " + geocodingInfo, Toast.LENGTH_SHORT).show();
     progressListener.stopRefreshProgress();
-    List<Address> addresses = localisation.getNearbyAddresses();
-    List<String> printableAddresses = getPrintableAddresses(addresses);
 
-    locationsView.setAdapter(new ArrayAdapter<String>(context, R.layout.list_item, printableAddresses));
+
+    if (localisation.getNearbyAddresses().size() == 1){
+      localisation.setPickedAddress(localisation.getNearbyAddresses().get(0));
+    } else {
+      List<Address> addresses = localisation.getNearbyAddresses();
+      List<String> printableAddresses = getPrintableAddresses(addresses);
+      // open a dialog fragment
+    }
+
+    List<Localisation> localisations = new ArrayList<>();
+    localisations.add(localisation);
+    locationsView.setAdapter(new ArrayAdapter<Localisation>(context, R.layout.list_item, localisations));
   }
 
   public Localisation searchLocation(String searchName) {
@@ -59,22 +68,25 @@ public class LocalisationSearcher implements LocalisationListener {
       Log.w("location", e.toString());
     }
     progressListener.stopRefreshProgress();
-    List<String> printableAddresses = getPrintableAddresses(addresses);
-    locationsView.setAdapter(new ArrayAdapter<String>(context, R.layout.list_item, printableAddresses));
-    return new Localisation(addresses);
+    Localisation result = new Localisation(addresses, null);
+    if (addresses.size() == 1){
+      new Localisation(addresses, addresses.get(0));
+    } else {
+      List<String> printableAddresses = getPrintableAddresses(addresses);
+      // open a dialog fragment
+    }
+
+    List<Localisation> localisations = new ArrayList<>();
+    localisations.add(result);
+    locationsView.setAdapter(new ArrayAdapter<Localisation>(context, R.layout.list_item, localisations));
+    return result;
   }
 
   private List<String> getPrintableAddresses(List<Address> addresses) {
     List<String> printableAddresses = new ArrayList<>();
     for (Address address : addresses) {
-      StringBuilder addressLines = new StringBuilder();
-      int i = 0;
-      while (i < address.getMaxAddressLineIndex()){
-        addressLines.append(address.getAddressLine(i++));
-      }
-      printableAddresses.add(addressLines.toString());
+      printableAddresses.add(Localisation.getAddressLines(address));
     }
     return printableAddresses;
   }
-
 }
