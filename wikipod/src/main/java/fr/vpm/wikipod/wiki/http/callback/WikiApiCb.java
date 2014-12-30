@@ -30,7 +30,7 @@ public class WikiApiCb implements Callback<Query> {
   @Override
   public void success(Query query, Response response) {
     Log.d("http", "success content : " + query.toString());
-    List<Article> articles = new ArrayList<Article>();
+    ArrayList<Article> articles = new ArrayList<Article>();
     for (Page p : query.getPages()) {
       Article article = new Article(wikisource, p.getTitle(), p.getRevisions().get(0).getContent());
       articles.add(article);

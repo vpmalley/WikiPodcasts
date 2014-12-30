@@ -39,7 +39,7 @@ public class WikiContentService extends AsyncTextHttpClient {
 
   @Override
   protected void onPostExecute(List<String> contents) {
-    List<Article> articles = new ArrayList<>();
+    ArrayList<Article> articles = new ArrayList<>();
     for (int i = 0; i < contents.size(); i++) {
       String content = contents.get(i);
       Log.d("web", "content received : " + content.substring(0, Math.min(content.length(), 20)));

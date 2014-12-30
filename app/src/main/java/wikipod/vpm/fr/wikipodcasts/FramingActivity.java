@@ -45,7 +45,7 @@ public class FramingActivity extends ActionBarActivity
   public void onNavigationDrawerItemSelected(int position) {
     Fragment fragment = null;
     if (0 == position) {
-      fragment = LocationFragment.newInstance(position + 1);
+      fragment = LocalisationsFragment.newInstance(position + 1);
       FragmentManager fragmentManager = getSupportFragmentManager();
       fragmentManager.beginTransaction()
               .replace(R.id.container, fragment)

@@ -1,13 +1,9 @@
 package wikipod.vpm.fr.wikipodcasts.search;
 
 import android.content.Context;
-import android.location.Geocoder;
 import android.location.Location;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import fr.vpm.wikipod.location.Localisation;
 import fr.vpm.wikipod.location.LocalisationListener;
@@ -15,7 +11,6 @@ import fr.vpm.wikipod.wiki.Article;
 import fr.vpm.wikipod.wiki.ArticleListener;
 import fr.vpm.wikipod.wiki.GeoArticles;
 import fr.vpm.wikipod.wiki.http.GeoWiki;
-import wikipod.vpm.fr.wikipodcasts.R;
 import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 
 /**
@@ -27,13 +22,13 @@ public class ArticleSearcher implements LocalisationListener, ArticleListener {
 
   private final Context context;
 
-  private final AbsListView articlesView;
+  private final ArticleListener articleListener;
 
   private final ProgressBarListener progressListener;
 
-  public ArticleSearcher(Context context, AbsListView articlesView, ProgressBarListener progressListener) {
+  public ArticleSearcher(Context context, ArticleListener articleListener, ProgressBarListener progressListener) {
     this.context = context;
-    this.articlesView = articlesView;
+    this.articleListener = articleListener;
     this.progressListener = progressListener;
   }
 
@@ -49,16 +44,11 @@ public class ArticleSearcher implements LocalisationListener, ArticleListener {
   }
 
   @Override
-  public void onArticlesFound(List<Article> articles) {
-    String result = "";
-    if (articles != null) {
-      result = articles.toString();
-      if (articlesView != null) {
-        ArrayAdapter<Article> articlesAdapter = new ArrayAdapter<Article>(context, R.layout.list_item, articles);
-        articlesView.setAdapter(articlesAdapter);
-      }
-    }
+  public void onArticlesFound(ArrayList<Article> articles) {
     progressListener.stopRefreshProgress();
-    Toast.makeText(context, "received articles " + result, Toast.LENGTH_SHORT).show();
+    if (articles == null){
+      articles = new ArrayList<>();
+    }
+    articleListener.onArticlesFound(articles);
   }
 }

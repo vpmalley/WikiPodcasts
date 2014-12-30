@@ -29,7 +29,7 @@ import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class LocationFragment extends Fragment implements LocalisationListener {
+public class LocalisationsFragment extends Fragment implements LocalisationListener {
 
   /**
    * The fragment argument representing the section number for this
@@ -48,15 +48,15 @@ public class LocationFragment extends Fragment implements LocalisationListener {
    * Returns a new instance of this fragment for the given section
    * number.
    */
-  public static LocationFragment newInstance(int sectionNumber) {
-    LocationFragment fragment = new LocationFragment();
+  public static LocalisationsFragment newInstance(int sectionNumber) {
+    LocalisationsFragment fragment = new LocalisationsFragment();
     Bundle args = new Bundle();
     args.putInt(ARG_SECTION_NUMBER, sectionNumber);
     fragment.setArguments(args);
     return fragment;
   }
 
-  public LocationFragment() {
+  public LocalisationsFragment() {
   }
 
   @Override
@@ -78,7 +78,7 @@ public class LocationFragment extends Fragment implements LocalisationListener {
       public void onClick(View v) {
         String searchText = searchField.getText().toString();
         searchField.setText("");
-        new LocalisationSearcher(getActivity(), LocationFragment.this, progressListener).searchLocalisationByName(searchText);
+        new LocalisationSearcher(getActivity(), LocalisationsFragment.this, progressListener).searchLocalisationByName(searchText);
       }
     });
 
@@ -87,7 +87,7 @@ public class LocationFragment extends Fragment implements LocalisationListener {
     locateButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        LocationProvider.Status status = new LocalisationSearcher(getActivity(), LocationFragment.this, progressListener).searchLocalisation();
+        LocationProvider.Status status = new LocalisationSearcher(getActivity(), LocalisationsFragment.this, progressListener).searchLocalisation();
         Toast.makeText(getActivity(), "tried acquiring location, resulted in " + status.name(), Toast.LENGTH_SHORT).show();
       }
     });

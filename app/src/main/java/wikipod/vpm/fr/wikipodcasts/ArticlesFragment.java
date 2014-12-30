@@ -1,5 +1,6 @@
 package wikipod.vpm.fr.wikipodcasts;
 
+
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
@@ -10,12 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
 import fr.vpm.wikipod.wiki.Article;
-import wikipod.vpm.fr.wikipodcasts.bean.LocalArticles;
+import fr.vpm.wikipod.wiki.ArticleListener;
 import wikipod.vpm.fr.wikipodcasts.search.ArticleSearcher;
 import wikipod.vpm.fr.wikipodcasts.util.ArticlePager;
 import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
@@ -23,7 +25,7 @@ import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ArticlesFragment extends Fragment {
+public class ArticlesFragment extends Fragment implements ArticleListener {
   /**
    * The fragment argument representing a geographical location
    */
@@ -32,7 +34,10 @@ public class ArticlesFragment extends Fragment {
   private AbsListView articlesView;
 
   private ProgressBarListener progressListener;
+
   private Location location;
+
+  private ArrayList<Article> articles = new ArrayList<>();
 
   /**
    * Returns a new instance of this fragment for the given section
@@ -60,21 +65,17 @@ public class ArticlesFragment extends Fragment {
     articlesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Article clickedArticle = (Article) parent.getAdapter().getItem(position);
         Intent i = new Intent(getActivity(), ArticleActivity.class);
 
-        ArrayList<Article> clickedArticleAsList = new ArrayList<Article>();
-        clickedArticleAsList.add(clickedArticle);
-
-        i.putExtra(ArticlePager.ARTICLES_KEY, new LocalArticles(clickedArticleAsList));
-        i.putExtra(ArticlePager.INITIAL_POS_KEY, 0);
+        i.putExtra(ArticlePager.ARTICLES_KEY, articles);
+        i.putExtra(ArticlePager.INITIAL_POS_KEY, position);
         startActivity(i);
       }
     });
 
     location = getArguments().getParcelable(ARG_LOCATION);
     if (location != null) {
-      new ArticleSearcher(getActivity(), articlesView, progressListener).searchAroundLocation(location);
+      new ArticleSearcher(getActivity(), this, progressListener).searchAroundLocation(location);
     }
     return rootView;
   }
@@ -84,5 +85,12 @@ public class ArticlesFragment extends Fragment {
     super.onAttach(activity);
     ((FramingActivity) activity).onSectionAttached(
             getArguments().getInt(ARG_LOCATION));
+  }
+
+  @Override
+  public void onArticlesFound(ArrayList<Article> articles) {
+    this.articles = articles;
+    ArrayAdapter<Article> articlesAdapter = new ArrayAdapter<Article>(getActivity(), R.layout.list_item, this.articles);
+    articlesView.setAdapter(articlesAdapter);
   }
 }

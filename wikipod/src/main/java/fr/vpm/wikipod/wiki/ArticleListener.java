@@ -1,6 +1,6 @@
 package fr.vpm.wikipod.wiki;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Listener for informative articles retrieval.
@@ -13,6 +13,6 @@ public interface ArticleListener {
    * When articles are received, all {@link fr.vpm.wikipod.wiki.ArticleListener} will be notified with this method
    * @param articles the list of articles received
    */
-  void onArticlesFound(List<Article> articles);
+  void onArticlesFound(ArrayList<Article> articles);
 
 }

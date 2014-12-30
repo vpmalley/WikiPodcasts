@@ -35,6 +35,8 @@ public class Localisation extends Location{
 
   public void setPickedAddress(Address pickedAddress) {
     this.pickedAddress = pickedAddress;
+    this.setLatitude(pickedAddress.getLatitude());
+    this.setLongitude(pickedAddress.getLongitude());
   }
 
   public Address getPickedAddress() {
