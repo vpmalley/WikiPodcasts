@@ -7,22 +7,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import fr.vpm.wikipod.location.AndroidLocationProvider;
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.vpm.wikipod.location.Localisation;
+import fr.vpm.wikipod.location.LocalisationListener;
 import fr.vpm.wikipod.location.LocationProvider;
-import wikipod.vpm.fr.wikipodcasts.search.ArticleSearcher;
 import wikipod.vpm.fr.wikipodcasts.search.LocalisationSearcher;
 import wikipod.vpm.fr.wikipodcasts.util.ProgressBarListener;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class LocationFragment extends Fragment {
+public class LocationFragment extends Fragment implements LocalisationListener {
+
   /**
    * The fragment argument representing the section number for this
    * fragment.
@@ -32,6 +36,8 @@ public class LocationFragment extends Fragment {
   private AbsListView locationsView;
 
   private ProgressBarListener progressListener;
+
+  private List<Localisation> localisations = new ArrayList<>();
 
   /**
    * Returns a new instance of this fragment for the given section
@@ -61,8 +67,7 @@ public class LocationFragment extends Fragment {
     searchButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        progressListener.startRefreshProgress();
-        new LocalisationSearcher(getActivity(), locationsView, progressListener).searchLocation(searchField.getText().toString());
+        new LocalisationSearcher(getActivity(), LocationFragment.this, progressListener).searchLocalisationByName(searchField.getText().toString());
       }
     });
 
@@ -70,9 +75,7 @@ public class LocationFragment extends Fragment {
     locateButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        progressListener.startRefreshProgress();
-        LocationProvider locP = new AndroidLocationProvider(getActivity(), new LocalisationSearcher(getActivity(), locationsView, progressListener));
-        LocationProvider.Status status = locP.acquireCurrentLocation();
+        LocationProvider.Status status = new LocalisationSearcher(getActivity(), LocationFragment.this, progressListener).searchLocalisation();
         Toast.makeText(getActivity(), "tried acquiring location, resulted in " + status.name(), Toast.LENGTH_SHORT).show();
       }
     });
@@ -84,5 +87,11 @@ public class LocationFragment extends Fragment {
     super.onAttach(activity);
     ((FramingActivity) activity).onSectionAttached(
             getArguments().getInt(ARG_SECTION_NUMBER));
+  }
+
+  @Override
+  public void onLocalisationChanged(Localisation localisation) {
+    localisations.add(localisation);
+    locationsView.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.list_item, localisations));
   }
 }

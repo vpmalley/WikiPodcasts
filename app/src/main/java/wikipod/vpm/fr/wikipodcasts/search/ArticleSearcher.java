@@ -37,7 +37,7 @@ public class ArticleSearcher implements LocalisationListener, ArticleListener {
   }
 
   @Override
-  public void onLocationChanged(Localisation localisation) {
+  public void onLocalisationChanged(Localisation localisation) {
     String geocodingInfo = "no geocoding implem";
     if (Geocoder.isPresent()){
       geocodingInfo = localisation.getNearbyAddresses().get(0).getLocality();

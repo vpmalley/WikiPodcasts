@@ -20,10 +20,9 @@ public class Localisation extends Location{
     super(l);
   }
 
-  public Localisation(List<Address> nearbyAddresses, Address address) {
+  public Localisation(List<Address> nearbyAddresses) {
     super("Geocoder");
     this.nearbyAddresses = nearbyAddresses;
-    this.pickedAddress = address;
   }
 
   public void setNearbyAddresses(List<Address> nearbyAddresses) {

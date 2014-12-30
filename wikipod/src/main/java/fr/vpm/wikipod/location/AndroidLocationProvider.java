@@ -53,7 +53,7 @@ public class AndroidLocationProvider implements LocationProvider, LocationListen
         status = Status.NO_PROVIDER;
       }
     } else {
-      listener.onLocationChanged(getLocalisationFromLocation(lastLocation));
+      listener.onLocalisationChanged(getLocalisationFromLocation(lastLocation));
       status = Status.LOCATION_AVAILABLE;
     }
     return status;
@@ -72,7 +72,7 @@ public class AndroidLocationProvider implements LocationProvider, LocationListen
   public void onLocationChanged(Location location) {
     locationSatisfying();
     Localisation loc = getLocalisationFromLocation(location);
-    listener.onLocationChanged(loc);
+    listener.onLocalisationChanged(loc);
   }
 
   private Localisation getLocalisationFromLocation(Location location) {

@@ -5,5 +5,5 @@ package fr.vpm.wikipod.location;
  */
 public interface LocalisationListener {
 
-  public void onLocationChanged(Localisation localisation);
+  public void onLocalisationChanged(Localisation localisation);
 }
