@@ -3,6 +3,8 @@ package wikipod.vpm.fr.wikipodcasts;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,7 @@ public class LocationFragment extends Fragment implements LocalisationListener {
   private ProgressBarListener progressListener;
 
   private List<Localisation> localisations = new ArrayList<>();
+  private ArrayAdapter<Localisation> locationsAdapter;
 
   /**
    * Returns a new instance of this fragment for the given section
@@ -61,16 +64,23 @@ public class LocationFragment extends Fragment implements LocalisationListener {
     ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.processing);
     progressListener = new ProgressBarListener(progressBar);
     locationsView = (AbsListView) rootView.findViewById(R.id.locations);
+
     final EditText searchField = (EditText) rootView.findViewById(R.id.searchField);
 
+    filterLocations(searchField);
+
+    // manage search button clicks
     ImageButton searchButton = (ImageButton) rootView.findViewById(R.id.searchButton);
     searchButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        new LocalisationSearcher(getActivity(), LocationFragment.this, progressListener).searchLocalisationByName(searchField.getText().toString());
+        String searchText = searchField.getText().toString();
+        searchField.setText("");
+        new LocalisationSearcher(getActivity(), LocationFragment.this, progressListener).searchLocalisationByName(searchText);
       }
     });
 
+    // manage locate button clicks
     ImageButton locateButton = (ImageButton) rootView.findViewById(R.id.locateButton);
     locateButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -80,6 +90,30 @@ public class LocationFragment extends Fragment implements LocalisationListener {
       }
     });
     return rootView;
+  }
+
+  /**
+   * Adds filtering from search field over the locations in the list
+   * @param searchField the text field for searching locations
+   */
+  private void filterLocations(EditText searchField) {searchField.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+      }
+
+      @Override
+      public void onTextChanged(CharSequence searchText, int start, int before, int count) {
+        if (locationsAdapter != null) {
+          locationsAdapter.getFilter().filter(searchText.toString());
+        }
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {
+
+      }
+    });
   }
 
   @Override
@@ -92,6 +126,7 @@ public class LocationFragment extends Fragment implements LocalisationListener {
   @Override
   public void onLocalisationChanged(Localisation localisation) {
     localisations.add(localisation);
-    locationsView.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.list_item, localisations));
+    locationsAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item, localisations);
+    locationsView.setAdapter(locationsAdapter);
   }
 }
