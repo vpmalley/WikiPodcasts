@@ -46,13 +46,11 @@ public class FramingActivity extends ActionBarActivity
     Fragment fragment = null;
     if (0 == position) {
       fragment = LocationFragment.newInstance(position + 1);
-    } else {
-      fragment = ArticlesFragment.newInstance(position + 1);
+      FragmentManager fragmentManager = getSupportFragmentManager();
+      fragmentManager.beginTransaction()
+              .replace(R.id.container, fragment)
+              .commit();
     }
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    fragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .commit();
   }
 
   public void onSectionAttached(int number) {

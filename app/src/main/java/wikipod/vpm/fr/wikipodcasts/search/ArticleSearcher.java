@@ -2,6 +2,7 @@ package wikipod.vpm.fr.wikipodcasts.search;
 
 import android.content.Context;
 import android.location.Geocoder;
+import android.location.Location;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -38,14 +39,13 @@ public class ArticleSearcher implements LocalisationListener, ArticleListener {
 
   @Override
   public void onLocalisationChanged(Localisation localisation) {
-    String geocodingInfo = "no geocoding implem";
-    if (Geocoder.isPresent()){
-      geocodingInfo = localisation.getNearbyAddresses().get(0).getLocality();
-    }
-    Toast.makeText(context, "received localisation " + localisation.getLatitude() + ", " +
-            localisation.getLongitude() + ", " + geocodingInfo, Toast.LENGTH_SHORT).show();
-    GeoArticles geoWiki = new GeoWiki("");
-    geoWiki.searchArticles(localisation, DEFAULT_RADIUS, this);
+    searchAroundLocation(localisation);
+  }
+
+  public void searchAroundLocation(Location location) {
+    progressListener.startRefreshProgress();
+    GeoArticles geoWiki = new GeoWiki(GeoWiki.EN_WIKIPEDIA);
+    geoWiki.searchArticles(location, DEFAULT_RADIUS, this);
   }
 
   @Override

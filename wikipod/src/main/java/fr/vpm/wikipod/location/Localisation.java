@@ -35,7 +35,6 @@ public class Localisation extends Location{
 
   public void setPickedAddress(Address pickedAddress) {
     this.pickedAddress = pickedAddress;
-
   }
 
   public Address getPickedAddress() {

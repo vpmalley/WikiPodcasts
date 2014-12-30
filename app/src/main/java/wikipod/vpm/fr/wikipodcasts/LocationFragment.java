@@ -3,12 +3,14 @@ package wikipod.vpm.fr.wikipodcasts;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -89,6 +91,20 @@ public class LocationFragment extends Fragment implements LocalisationListener {
         Toast.makeText(getActivity(), "tried acquiring location, resulted in " + status.name(), Toast.LENGTH_SHORT).show();
       }
     });
+
+    // manage locations clicks
+    locationsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // opening the fragment showing the articles for this location
+        Fragment fragment = ArticlesFragment.newInstance(locationsAdapter.getItem(position));
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
+      }
+    });
+
     return rootView;
   }
 
