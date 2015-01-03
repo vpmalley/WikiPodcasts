@@ -3,7 +3,6 @@ package fr.vpm.wikipod.wiki.http.callback;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.vpm.wikipod.wiki.Article;
 import fr.vpm.wikipod.wiki.ArticleListener;

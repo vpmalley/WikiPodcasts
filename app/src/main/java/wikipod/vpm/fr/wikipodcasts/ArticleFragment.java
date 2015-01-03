@@ -15,6 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.HashMap;
 
 import fr.vpm.wikipod.wiki.Article;
@@ -40,8 +47,26 @@ public class ArticleFragment extends Fragment {
     Bundle b = getArguments();
     if (b.containsKey(ArticlePager.ARTICLE_KEY)) {
       article = b.getParcelable(ArticlePager.ARTICLE_KEY);
-      contentView.loadData(article.getContent(), "text/html", "UTF-8");
-      Log.d("content", article.getContent().substring(0, 400));
+      InputStream contentStream = null;
+      String result = "";
+      try {
+        contentStream = new FileInputStream(new File(article.getContent()));
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(contentStream, writer, "UTF-8");
+        result = writer.toString();
+      } catch (IOException e) {
+        Log.w("file", "could not load file content");
+      } finally {
+        if (contentStream != null) {
+          try {
+            contentStream.close();
+          } catch (IOException e) {
+            Log.w("file", "could not load file content");
+          }
+        }
+      }
+      contentView.loadDataWithBaseURL(null, result, "text/html", "utf-8", null);
+      Log.d("content", article.getContent());
     }
     return v;
   }
