@@ -1,7 +1,5 @@
 package fr.vpm.wikipod.wiki.http;
 
-import android.location.Location;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -9,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.vpm.wikipod.Constants;
+import fr.vpm.wikipod.location.Localisation;
 import fr.vpm.wikipod.wiki.ArticleListener;
 import fr.vpm.wikipod.wiki.GeoArticles;
 import fr.vpm.wikipod.wiki.http.api.Query;
@@ -44,7 +43,7 @@ public class GeoWiki implements GeoArticles, Searches {
   }
 
   @Override
-  public Status searchArticles(Location location, int radius, ArticleListener listener) {
+  public Status searchArticles(Localisation location, int radius, ArticleListener listener) {
     this.listener = listener;
     if (radius <= 0) {
       radius = Constants.LOCATION_RADIUS;
@@ -54,7 +53,7 @@ public class GeoWiki implements GeoArticles, Searches {
   }
 
   @Override
-  public void searchAround(Location location, int radius) {
+  public void searchAround(Localisation location, int radius) {
     WikiService wService = getWikiService(wikisource, new ArrayList<String>());
     wService.getArticleIds(String.valueOf(radius), formatLocation(location), new GeosearchCb(this));
   }
@@ -83,7 +82,7 @@ public class GeoWiki implements GeoArticles, Searches {
    * @param location the location to transform
    * @return the transformed location, ready to append to a Mediawiki query
    */
-  private String formatLocation(Location location) {
+  private String formatLocation(Localisation location) {
     String lat = String.valueOf(location.getLatitude());
     String lon = String.valueOf(location.getLongitude());
     return lat + "|" + lon;

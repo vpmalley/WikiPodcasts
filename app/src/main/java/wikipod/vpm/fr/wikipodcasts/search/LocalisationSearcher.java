@@ -29,7 +29,10 @@ public class LocalisationSearcher implements LocalisationListener, AddressPicked
   private final LocalisationListener localisationListener;
 
   private final ProgressBarListener progressListener;
-  private Localisation currentLocalisation;
+
+  private List<Address> nearbyAddresses = new ArrayList<>();
+
+  private Localisation currentLocalisation = null;
 
   public LocalisationSearcher(Activity activity, LocalisationListener localisationListener, ProgressBarListener progressListener) {
     this.activity = activity;
@@ -53,22 +56,21 @@ public class LocalisationSearcher implements LocalisationListener, AddressPicked
    */
   public void searchLocalisationByName(String searchName) {
     progressListener.startRefreshProgress();
-    List<Address> addresses = new ArrayList<>();
+    nearbyAddresses = new ArrayList<>();
     try {
       if (Geocoder.isPresent()) {
-        addresses = new Geocoder(activity).getFromLocationName(searchName, Localisation.DEFAULT_MAX_RESULTS);
+        nearbyAddresses = new Geocoder(activity).getFromLocationName(searchName, Localisation.DEFAULT_MAX_RESULTS);
       }
     } catch (IOException e) {
       Log.w("location", e.toString());
     }
 
-    currentLocalisation = new Localisation(addresses);
-    if (addresses.isEmpty()){
+    if (nearbyAddresses.isEmpty()){
       Toast.makeText(activity, "No place found with that name", Toast.LENGTH_SHORT).show();
-    } else if (addresses.size() == 1){
+    } else if (nearbyAddresses.size() == 1){
       onAddressPicked(0, ADDRESS_REQ);
     } else {
-      ArrayList<String> printableAddresses = getPrintableAddresses(addresses);
+      ArrayList<String> printableAddresses = getPrintableAddresses(nearbyAddresses);
       // open a dialog fragment
       new AddressPickerFragment().openAddressPicker(activity, printableAddresses, this, ADDRESS_REQ);
     }
@@ -94,8 +96,8 @@ public class LocalisationSearcher implements LocalisationListener, AddressPicked
     } else if (localisation.getNearbyAddresses().size() == 1){
       onAddressPicked(0, ADDRESS_REQ);
     } else {
-      List<Address> addresses = localisation.getNearbyAddresses();
-      ArrayList<String> printableAddresses = getPrintableAddresses(addresses);
+      nearbyAddresses = localisation.getNearbyAddresses();
+      ArrayList<String> printableAddresses = getPrintableAddresses(nearbyAddresses);
       new AddressPickerFragment().openAddressPicker(activity, printableAddresses, this, ADDRESS_REQ);
     }
     progressListener.stopRefreshProgress();
@@ -122,7 +124,11 @@ public class LocalisationSearcher implements LocalisationListener, AddressPicked
   @Override
   public void onAddressPicked(int position, int requestCode) {
      if (ADDRESS_REQ == requestCode) {
-       currentLocalisation.setPickedAddress(currentLocalisation.getNearbyAddresses().get(position));
+       if (currentLocalisation == null) {
+         currentLocalisation = new Localisation(nearbyAddresses.get(position));
+       } else {
+         currentLocalisation.setNearbyAddress(nearbyAddresses.get(position));
+       }
        localisationListener.onLocalisationChanged(currentLocalisation);
      }
   }

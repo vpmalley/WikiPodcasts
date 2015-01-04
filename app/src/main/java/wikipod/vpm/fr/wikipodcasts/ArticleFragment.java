@@ -50,7 +50,7 @@ public class ArticleFragment extends Fragment {
       InputStream contentStream = null;
       String result = "";
       try {
-        contentStream = new FileInputStream(new File(article.getContent()));
+        contentStream = new FileInputStream(new File(article.getContentFile()));
         StringWriter writer = new StringWriter();
         IOUtils.copy(contentStream, writer, "UTF-8");
         result = writer.toString();
@@ -66,7 +66,7 @@ public class ArticleFragment extends Fragment {
         }
       }
       contentView.loadDataWithBaseURL(null, result, "text/html", "utf-8", null);
-      Log.d("content", article.getContent());
+      Log.d("content", article.getContentFile());
     }
     return v;
   }

@@ -3,7 +3,6 @@ package wikipod.vpm.fr.wikipodcasts;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
+import fr.vpm.wikipod.location.Localisation;
 import fr.vpm.wikipod.wiki.Article;
 import fr.vpm.wikipod.wiki.ArticleListener;
 import wikipod.vpm.fr.wikipodcasts.search.ArticleSearcher;
@@ -35,7 +35,7 @@ public class ArticlesFragment extends Fragment implements ArticleListener {
 
   private ProgressBarListener progressListener;
 
-  private Location location;
+  private Localisation location;
 
   private ArrayList<Article> articles = new ArrayList<>();
 
@@ -43,10 +43,10 @@ public class ArticlesFragment extends Fragment implements ArticleListener {
    * Returns a new instance of this fragment for the given section
    * number.
    */
-  public static ArticlesFragment newInstance(Location location) {
+  public static ArticlesFragment newInstance(Localisation localisation) {
     ArticlesFragment fragment = new ArticlesFragment();
     Bundle args = new Bundle();
-    args.putParcelable(ARG_LOCATION, location);
+    args.putParcelable(ARG_LOCATION, localisation);
     fragment.setArguments(args);
     return fragment;
   }

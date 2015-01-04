@@ -4,36 +4,46 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by vince on 29/11/14.
  */
+@DatabaseTable(tableName = "articles")
 public class Article implements Parcelable {
 
+  private static final String ID_KEY = "id";
   private static final String SOURCE_KEY = "source";
-
   private static final String TITLE_KEY = "title";
 
-  private static final String CONTENT_KEY = "content";
+  private static final String CONTENT_KEY = "contentFile";
   private static final String WIKI_PATH = "/w/index.php?action=view&title=";
 
+  @DatabaseField(id = true, generatedId = true)
+  private long id;
+
+  @DatabaseField(canBeNull = false)
   private final String wikisource;
 
+  @DatabaseField(canBeNull = false)
   private final String title;
 
-  private final String content;
+  @DatabaseField(canBeNull = false)
+  private final String contentFile;
 
   public Article(String wikisource, String title, String content) {
     this.wikisource = wikisource;
     this.title = title;
-    this.content = content;
+    this.contentFile = content;
   }
 
   public String getTitle(){
     return title;
   }
 
-  public String getContent(){
-    return content;
+  public String getContentFile(){
+    return contentFile;
   }
 
   public String getWebUrl() {
@@ -53,9 +63,10 @@ public class Article implements Parcelable {
   @Override
   public void writeToParcel(Parcel parcel, int i) {
     Bundle b = new Bundle();
+    b.putLong(ID_KEY, id);
     b.putString(SOURCE_KEY, wikisource);
     b.putString(TITLE_KEY, title);
-    b.putString(CONTENT_KEY, content);
+    b.putString(CONTENT_KEY, contentFile);
     parcel.writeBundle(b);
   }
 
@@ -63,9 +74,10 @@ public class Article implements Parcelable {
     Bundle b = in.readBundle(Article.class.getClassLoader());
     // without setting the classloader, it fails on BadParcelableException : ClassNotFoundException when
     // unmarshalling Media class
+    id = b.getLong(ID_KEY);
     wikisource = b.getString(SOURCE_KEY);
     title = b.getString(TITLE_KEY);
-    content = b.getString(CONTENT_KEY);
+    contentFile = b.getString(CONTENT_KEY);
   }
 
   public static final Parcelable.Creator<Article> CREATOR

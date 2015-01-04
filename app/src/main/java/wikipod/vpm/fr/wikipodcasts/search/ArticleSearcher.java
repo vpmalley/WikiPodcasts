@@ -1,7 +1,6 @@
 package wikipod.vpm.fr.wikipodcasts.search;
 
 import android.content.Context;
-import android.location.Location;
 
 import java.util.ArrayList;
 
@@ -37,7 +36,7 @@ public class ArticleSearcher implements LocalisationListener, ArticleListener {
     searchAroundLocation(localisation);
   }
 
-  public void searchAroundLocation(Location location) {
+  public void searchAroundLocation(Localisation location) {
     progressListener.startRefreshProgress();
     GeoArticles geoWiki = new GeoWiki(GeoWiki.EN_WIKIPEDIA);
     geoWiki.searchArticles(location, DEFAULT_RADIUS, this);

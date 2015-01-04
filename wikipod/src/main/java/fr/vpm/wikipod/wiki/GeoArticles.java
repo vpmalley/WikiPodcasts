@@ -1,6 +1,6 @@
 package fr.vpm.wikipod.wiki;
 
-import android.location.Location;
+import fr.vpm.wikipod.location.Localisation;
 
 /**
  * Provides a list of informative articles based on a location
@@ -22,5 +22,5 @@ public interface GeoArticles {
    * @param radius radius of the search (in meters)
    * @return the {@link Status} for the current situation
    */
-  public Status searchArticles(Location location, int radius, ArticleListener listener);
+  public Status searchArticles(Localisation location, int radius, ArticleListener listener);
 }

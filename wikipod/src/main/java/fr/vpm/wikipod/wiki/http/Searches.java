@@ -1,8 +1,8 @@
 package fr.vpm.wikipod.wiki.http;
 
-import android.location.Location;
-
 import java.util.List;
+
+import fr.vpm.wikipod.location.Localisation;
 
 /**
  * Created by vince on 02/12/14.
@@ -14,7 +14,7 @@ public interface Searches {
    * @param location the location to search around
    * @param radius the radius (in meters) around the location, to search
    */
-  void searchAround(Location location, int radius);
+  void searchAround(Localisation location, int radius);
 
   /**
    * Search for the content of these pages
