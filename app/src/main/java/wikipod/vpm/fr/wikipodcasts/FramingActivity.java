@@ -9,6 +9,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+
+import fr.vpm.wikipod.db.DatabaseHelper;
+
 
 /**
  * This is the main activity, mostly a frame around the fragment containing the actual data and behaviour
@@ -25,6 +29,8 @@ public class FramingActivity extends ActionBarActivity
    * Used to store the last screen title. For use in {@link #restoreActionBar()}.
    */
   private CharSequence mTitle;
+
+  private DatabaseHelper databaseHelper = null;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +109,21 @@ public class FramingActivity extends ActionBarActivity
     return super.onOptionsItemSelected(item);
   }
 
+  public DatabaseHelper getHelper() {
+    if (databaseHelper == null) {
+      databaseHelper =
+              OpenHelperManager.getHelper(this, DatabaseHelper.class);
+    }
+    return databaseHelper;
+  }
 
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    if (databaseHelper != null) {
+      OpenHelperManager.releaseHelper();
+      databaseHelper = null;
+    }
+  }
 }
 

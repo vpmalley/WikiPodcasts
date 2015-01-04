@@ -7,6 +7,9 @@ import android.os.Parcelable;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import fr.vpm.wikipod.location.Localisation;
+import fr.vpm.wikipod.wiki.http.GeoWiki;
+
 /**
  * Created by vince on 29/11/14.
  */
@@ -20,8 +23,11 @@ public class Article implements Parcelable {
   private static final String CONTENT_KEY = "contentFile";
   private static final String WIKI_PATH = "/w/index.php?action=view&title=";
 
-  @DatabaseField(id = true, generatedId = true)
+  @DatabaseField(generatedId = true)
   private long id;
+
+  @DatabaseField(canBeNull = false)
+  private long localisationId;
 
   @DatabaseField(canBeNull = false)
   private final String wikisource;
@@ -32,10 +38,27 @@ public class Article implements Parcelable {
   @DatabaseField(canBeNull = false)
   private final String contentFile;
 
+  private Localisation localisation;
+
+  Article(){
+    wikisource = GeoWiki.EN_WIKIPEDIA;
+    title = "";
+    contentFile = "";
+  }
+
   public Article(String wikisource, String title, String content) {
     this.wikisource = wikisource;
     this.title = title;
     this.contentFile = content;
+  }
+
+  public void setLocalisation(Localisation localisation) {
+    localisationId = localisation.getDbId();
+    this.localisation = localisation;
+  }
+
+  public Localisation getLocalisation() {
+    return localisation;
   }
 
   public String getTitle(){

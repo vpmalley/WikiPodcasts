@@ -22,6 +22,7 @@ public class Localisation implements Parcelable {
 
   private static final String SRC_GEOCODER = "src_geocoder";
   private static final String SRC_GPS = "src_gps";
+  private static final String SRC_DB = "src_db";
 
   private static final String SOURCE_KEY = "source";
   private static final String LAT_KEY = "lat";
@@ -31,7 +32,7 @@ public class Localisation implements Parcelable {
   private static final String CITY_KEY = "city";
   private static final String ID_KEY = "id";
 
-  @DatabaseField(id = true, generatedId = true)
+  @DatabaseField(generatedId = true)
   private long id;
 
   @DatabaseField
@@ -54,6 +55,10 @@ public class Localisation implements Parcelable {
 
   private List<Address> nearbyAddresses = new ArrayList<>();
 
+  Localisation() {
+    source = SRC_DB;
+  }
+
   public Localisation(Location l) {
     latitude = l.getLatitude();
     longitude = l.getLongitude();
@@ -75,6 +80,10 @@ public class Localisation implements Parcelable {
     name = getAddressLines(nearbyAddress);
     country = nearbyAddress.getCountryName();
     city = nearbyAddress.getLocality();
+  }
+
+  public long getDbId() {
+    return id;
   }
 
   public double getLatitude() {
