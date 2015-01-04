@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,12 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.j256.ormlite.dao.Dao;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import fr.vpm.wikipod.db.DatabaseHelper;
 import fr.vpm.wikipod.location.Localisation;
 import fr.vpm.wikipod.location.LocalisationListener;
 import fr.vpm.wikipod.location.LocationProvider;
@@ -41,7 +45,6 @@ public class LocalisationsFragment extends Fragment implements LocalisationListe
 
   private ProgressBarListener progressListener;
 
-  private List<Localisation> localisations = new ArrayList<>();
   private ArrayAdapter<Localisation> locationsAdapter;
 
   /**
@@ -105,7 +108,34 @@ public class LocalisationsFragment extends Fragment implements LocalisationListe
       }
     });
 
+    locationsAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item, new ArrayList<Localisation>());
+    locationsView.setAdapter(locationsAdapter);
+
+    fillLocationsFromDB();
+
     return rootView;
+  }
+
+  private DatabaseHelper getDatabaseHelper() {
+    return ((FramingActivity) getActivity()).getHelper();
+  }
+
+  private void fillLocationsFromDB() {
+    DatabaseHelper dbHelper = getDatabaseHelper();
+    Dao<Localisation, Long> localisationDao = null;
+    try {
+      localisationDao = dbHelper.getDao(Localisation.class);
+    } catch (SQLException e) {
+      Log.w("db", "cannot retrieve locations. " + e.toString());
+    }
+    if (localisationDao != null) {
+      try {
+        locationsAdapter.addAll(localisationDao.queryForAll());
+      } catch (SQLException e) {
+        Log.w("db", "cannot retrieve locations. " + e.toString());
+      }
+    }
+    locationsAdapter.notifyDataSetChanged();
   }
 
   /**
@@ -113,23 +143,23 @@ public class LocalisationsFragment extends Fragment implements LocalisationListe
    * @param searchField the text field for searching locations
    */
   private void filterLocations(EditText searchField) {searchField.addTextChangedListener(new TextWatcher() {
-      @Override
-      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+    }
+
+    @Override
+    public void onTextChanged(CharSequence searchText, int start, int before, int count) {
+      if (locationsAdapter != null) {
+        locationsAdapter.getFilter().filter(searchText.toString());
       }
+    }
 
-      @Override
-      public void onTextChanged(CharSequence searchText, int start, int before, int count) {
-        if (locationsAdapter != null) {
-          locationsAdapter.getFilter().filter(searchText.toString());
-        }
-      }
+    @Override
+    public void afterTextChanged(Editable s) {
 
-      @Override
-      public void afterTextChanged(Editable s) {
-
-      }
-    });
+    }
+  });
   }
 
   @Override
@@ -141,8 +171,14 @@ public class LocalisationsFragment extends Fragment implements LocalisationListe
 
   @Override
   public void onLocalisationChanged(Localisation localisation) {
-    localisations.add(localisation);
-    locationsAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item, localisations);
-    locationsView.setAdapter(locationsAdapter);
+    locationsAdapter.add(localisation);
+    locationsAdapter.notifyDataSetChanged();
+    Dao<Localisation, Long> localisationDao;
+    try {
+      localisationDao = getDatabaseHelper().getDao(Localisation.class);
+      localisationDao.create(localisation);
+    } catch (SQLException e) {
+      Log.w("db", "Cannot persist the localisation. " + e.toString());
+    }
   }
 }
