@@ -29,13 +29,13 @@ public class Article implements Parcelable {
   @DatabaseField(canBeNull = false)
   private long localisationId;
 
-  @DatabaseField(canBeNull = false)
+  @DatabaseField(canBeNull = false, defaultValue = GeoWiki.EN_WIKIPEDIA)
   private final String wikisource;
 
-  @DatabaseField(canBeNull = false)
+  @DatabaseField(canBeNull = false, defaultValue = "")
   private final String title;
 
-  @DatabaseField(canBeNull = false)
+  @DatabaseField(canBeNull = false, defaultValue = "")
   private final String contentFile;
 
   private Localisation localisation;

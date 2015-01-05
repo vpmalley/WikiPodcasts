@@ -5,12 +5,20 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import fr.vpm.wikipod.db.DatabaseHelper;
+import fr.vpm.wikipod.wiki.Article;
 
 /**
  * Created by vince on 21/12/14.
@@ -54,6 +62,8 @@ public class Localisation implements Parcelable {
   private final String source;
 
   private List<Address> nearbyAddresses = new ArrayList<>();
+
+  private ArrayList<Article> articles = new ArrayList<>();
 
   Localisation() {
     source = SRC_DB;
@@ -175,4 +185,18 @@ public class Localisation implements Parcelable {
       return new Localisation[size];
     }
   };
+
+  public ArrayList<Article> getArticles(DatabaseHelper dbHelper) {
+    if (articles.isEmpty()) {
+      try {
+        Dao<Article, Long> articleDao = dbHelper.getDao(Article.class);
+        Map<String, Object> articleMatching = new HashMap<>();
+        articleMatching.put("localisationId", getDbId());
+        articles.addAll(articleDao.queryForFieldValues(articleMatching));
+      } catch (SQLException e) {
+        Log.w("db", "Cannot retrieve articles for a localisation. " + e.toString());
+      }
+    }
+    return articles;
+  }
 }
