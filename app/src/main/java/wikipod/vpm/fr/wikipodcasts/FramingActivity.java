@@ -1,5 +1,6 @@
 package wikipod.vpm.fr.wikipodcasts;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -100,9 +101,11 @@ public class FramingActivity extends ActionBarActivity
     // automatically handle clicks on the Home/Up button, so long
     // as you specify a parent activity in AndroidManifest.xml.
     int id = item.getItemId();
+    Intent i = null;
 
-    //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
+      i = new Intent(FramingActivity.this, PreferencesActivity.class);
+      startActivity(i);
       return true;
     }
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/pref_wiki_search"
+        android:key="pref_wiki_search">
+
+        <ListPreference
+            android:key="pref_wiki_source"
+            android:title="@string/pref_wiki_source"
+            android:summary="@string/summary_pref_wiki_source"
+            android:dialogTitle="@string/dialog_pref_wiki_source"
+            android:entries="@array/pref_wiki_source_entries"
+            android:entryValues="@array/pref_wiki_source_values"
+            android:defaultValue="@string/pref_wiki_source_default" />
+
+        <EditTextPreference
+            android:key="pref_wiki_search_radius"
+            android:title="@string/pref_wiki_search_radius"
+            android:summary="@string/summary_pref_wiki_search_radius"
+            android:dialogTitle="@string/dialog_pref_wiki_search_radius"
+            android:defaultValue="5000"/>
+
+        <EditTextPreference
+            android:key="pref_disp_max_items"
+            android:title="@string/pref_disp_max_items"
+            android:summary="@string/summary_pref_disp_max_items"
+            android:dialogTitle="@string/dialog_pref_disp_max_items"
+            android:defaultValue="20"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

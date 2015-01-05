@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prefs_category_wiki">Wiki Searches</string>
+    <string name="prefs_summ_category_wiki">Setttings about Wiki sources</string>
+
+    <string name="pref_disp_max_items">Maximum articles</string>
+    <string name="summary_pref_disp_max_items">how many articles you want to display at most</string>
+    <string name="dialog_pref_disp_max_items">Set the maximum number of articles to display</string>
+
+    <string name="pref_wiki_source">Wiki source to search</string>
+    <string name="summary_pref_wiki_source">The Wiki source to search</string>
+    <string name="dialog_pref_wiki_source">Set which Wiki source to search</string>
+    <string name="pref_wiki_source_default">https://en.wikipedia.org</string>
+
+    <string name="pref_wiki_search">Wiki searches</string>
+
+    <string name="pref_wiki_search_radius">Search radius</string>
+    <string name="summary_pref_wiki_search_radius">Search distance around your location (meters)</string>
+    <string name="dialog_pref_wiki_search_radius">Set the distance to search around your location (meters)</string>
+
+    <string name="pref_wiki_source_en_pedia">Wikipedia (English)</string>
+    <string name="pref_wiki_source_fr_pedia">Wikipedia (French)</string>
+    <string name="pref_wiki_source_en_voyage">Wikivoyage (English)</string>
+</resources>

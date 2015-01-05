@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_wiki_source_entries">
+        <item>@string/pref_wiki_source_en_pedia</item>
+        <item>@string/pref_wiki_source_fr_pedia</item>
+        <item>@string/pref_wiki_source_en_voyage</item>
+    </string-array>
+    <string-array name="pref_wiki_source_values">
+        <item>https://en.wikipedia.org</item>
+        <item>https://fr.wikipedia.org</item>
+        <item>https://en.wikivoyage.org</item>
+    </string-array>
+</resources>
