@@ -7,7 +7,7 @@ public interface Constants {
 
   static final long LOCATION_EXPIRY = 60000;
 
-  static final int LOCATION_RADIUS = 20000;
+  static final int LOCATION_RADIUS = 10000;
 
 
 

@@ -28,8 +28,10 @@ public class GeosearchCb implements Callback<Result> {
     Log.d("http", "success ids : " + query.toString());
 
     List<String> pageTitles = new ArrayList<String>();
-    for (Page article : query.getQuery().getGeosearch()) {
-      pageTitles.add(article.getTitle());
+    if (query.getQuery() != null) {
+      for (Page article : query.getQuery().getGeosearch()) {
+        pageTitles.add(article.getTitle());
+      }
     }
     searches.searchPageTitles(pageTitles);
   }

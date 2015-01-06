@@ -47,6 +47,8 @@ public class GeoWiki implements GeoArticles, Searches {
     this.listener = listener;
     if (radius <= 0) {
       radius = Constants.LOCATION_RADIUS;
+    } else if (radius > Constants.LOCATION_RADIUS) {
+      radius = Constants.LOCATION_RADIUS;
     }
     searchAround(location, radius);
     return Status.SEARCH_IN_PROGRESS;
